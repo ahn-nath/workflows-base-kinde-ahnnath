@@ -7,7 +7,7 @@ export const workflowSettings = {
     bindings: {
         "kinde.accessToken": {},
         "kinde.idToken": {},
-        "kinde.env": {} 
+        "kinde.env": {}, 
         url: {} // Enables URLSearchParams in the workflow environment
     }
 };
