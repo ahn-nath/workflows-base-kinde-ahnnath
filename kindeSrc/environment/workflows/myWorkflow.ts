@@ -6,7 +6,8 @@ export const workflowSettings = {
     trigger: "user:tokens_generation",
     bindings: {
         "kinde.accessToken": {},
-        "kinde.idToken": {}
+        "kinde.idToken": {},
+        url: {} // Enables URLSearchParams in the workflow environment
     }
 };
 
