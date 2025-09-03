@@ -14,6 +14,9 @@ export const workflowSettings = {
 
 // {request, context}
 export default async function Workflow(event) {
+    // TODO: Add error handling and edge case handling
+    // TODO: In the documentation, include the requiements for this workflow to work 
+
     // Logging for debugging purposes
     console.log("Token generation workflow with custom code executed");
     // Init 
@@ -49,16 +52,16 @@ export default async function Workflow(event) {
     // [2] Construct the user billing claim object 
     let billingClaimObject = {};
     // customer ID key with value as a string
-    billingClaimObject["customer_id"] = user.customer_id ? String(user.customer_id) : null;
+    billingClaimObject["customer_id"] = customerId ? customerId : null;
     // Billing section from the user object object call
     billingClaimObject["user_billing"] = user.billing ? user.billing : {};
     // Entitlements array
-    billingClaimObject['entitlements'] = entitlements ? entitlements : [];
+    billingClaimObject['entitlements'] = entitlements ? entitlements.entitlements : [];
     // Agreements array
-    billingClaimObject['agreements'] = agreements ? agreements : [];
+    billingClaimObject['agreements'] = agreements ? agreements.agreements : [];
     console.log("Billing claim object:", billingClaimObject);
 
 
-    kinde.accessToken.setCustomClaim("billingDetals", billingClaimObject);
-    kinde.idToken.setCustomClaim("bILLingDeatils", billingClaimObject);
+    kinde.accessToken.setCustomClaim("billingDetails", billingClaimObject);
+    kinde.idToken.setCustomClaim("billingDetails", billingClaimObject);
 }
