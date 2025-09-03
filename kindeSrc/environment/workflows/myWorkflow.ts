@@ -52,6 +52,6 @@ export default async function Workflow(event) {
     console.log("Billing claim object:", billingClaimObject);
 
 
-    kinde.accessToken.setCustomClaim("billingDetals", billingClaimObject
+    kinde.accessToken.setCustomClaim("billingDetals", billingClaimObject);
     kinde.idToken.setCustomClaim("bILLingDeatils", billingClaimObject);
 }
