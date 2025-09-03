@@ -1,3 +1,6 @@
+import { createKindeAPI } from "@kinde/infrastructure";
+
+
 export const workflowSettings = {
     id: "onTokenGeneration",
     trigger: "user:tokens_generation",
