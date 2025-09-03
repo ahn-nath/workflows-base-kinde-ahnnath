@@ -29,7 +29,7 @@ export default async function Workflow(event) {
     });
     console.log("User object:", user);
 
-    const customerId = user.customer_id;
+    const customerId = user.billing?.customer_id;
     if (!customerId) {
         console.log("No customer ID found for user, skipping billing claim construction.");
         return;
