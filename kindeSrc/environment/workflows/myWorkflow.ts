@@ -25,7 +25,7 @@ export default async function Workflow(event) {
     console.log("User ID:", userId);
     // TODo: [optimization] use params
     const { data: user } = await kindeAPI.get({
-        endpoint: `users?id=${userId}&expand=billing`,
+        endpoint: `user?id=${userId}&expand=billing`,
     });
     console.log("User object:", user);
 
