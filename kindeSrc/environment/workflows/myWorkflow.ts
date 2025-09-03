@@ -30,7 +30,6 @@ export default async function Workflow(event) {
     const { data: user } = await kindeAPI.get({
         endpoint: `user?id=${userId}&expand=billing`,
     });
-    console.log("User object:", user);
 
     const customerId = user.billing?.customer_id;
     if (!customerId) {
@@ -41,12 +40,10 @@ export default async function Workflow(event) {
     const { data: entitlements } = await kindeAPI.get({
         endpoint: `billing/entitlements?customer_id=${customerId}`
     });
-    console.log("Entitlements:", entitlements);
     // Agreements
     const { data: agreements } = await kindeAPI.get({
         endpoint: `billing/agreements?customer_id=${customerId}`
     });
-    console.log("Agreements:", agreements);
 
 
     // [2] Construct the user billing claim object 
@@ -59,9 +56,9 @@ export default async function Workflow(event) {
     billingClaimObject['entitlements'] = entitlements ? entitlements.entitlements : [];
     // Agreements array
     billingClaimObject['agreements'] = agreements ? agreements.agreements : [];
-    console.log("Billing claim object:", billingClaimObject);
 
 
+    // [3] Set the billing claim object in both the access token and ID token
     kinde.accessToken.setCustomClaim("billingDetails", billingClaimObject);
     kinde.idToken.setCustomClaim("billingDetails", billingClaimObject);
 }
