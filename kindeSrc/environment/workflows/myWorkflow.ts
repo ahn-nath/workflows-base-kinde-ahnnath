@@ -2,7 +2,7 @@ import {
     createKindeAPI, 
     WorkflowSettings, 
     WorkflowTrigger,
-c} from "@kinde/infrastructure";
+} from "@kinde/infrastructure";
 
 
 export const workflowSettings: WorkflowSettings = {
@@ -73,8 +73,8 @@ interface BillingClaim {
     agreements: Agreement[];
 }
 
-// Helpers
-const ensureArray = <T>(v: unknown): T[] => (Array.isArray(v) ? (v as  T[]) : []);
+// Helpers - 
+// const ensureArray = <T>(v: unknown): T[] => (Array.isArray(v) ? (v as  T[]) : []);
 
 
 /**
