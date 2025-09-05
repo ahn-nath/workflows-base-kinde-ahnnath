@@ -1,9 +1,17 @@
-import { createKindeAPI } from "@kinde/infrastructure";
+import { 
+    createKindeAPI, 
+    WorkflowSettings, 
+    WorkflowTrigger,
+c} from "@kinde/infrastructure";
 
 
-export const workflowSettings = {
+export const workflowSettings: WorkflowSettings = {
     id: "onTokenGeneration",
-    trigger: "user:tokens_generation",
+    name: "AddBillingDetailsToTokens",
+    trigger: WorkflowTrigger.UserTokenGeneration, // "user:tokens_generation",
+    failurePolicy: {
+        action: "stop"
+    },
     bindings: {
         "kinde.accessToken": {},
         "kinde.idToken": {},
@@ -12,10 +20,95 @@ export const workflowSettings = {
     }
 };
 
-// {request, context}
+
+// Types
+interface WorkflowEvent {
+    context: {
+        user: {
+            id: string;
+        };
+    };
+    request?: unknown;
+}
+
+interface UserBilling {
+    customer_id: string | null;
+    [key: string]: unknown;
+}
+
+interface UserResponse {
+    id?: string;
+    name?: string;
+    active?: boolean;
+    [k: string]: unknown;
+}
+
+interface Entitlement {
+    id?: string; 
+    name?: string;
+    active?: boolean;
+    [k: string]: unknown;
+}
+
+interface EntitlementsResponse {
+    entitlements?: Entitlement[];
+    [k: string]: unknown;
+}
+
+
+interface Agreement {
+    id?: string;
+    [k: string]: unknown;
+}
+
+interface AgreementsResponse{
+    agreements?: Agreement[];
+    [k: string]: unknown;
+}
+
+interface BillingClaim {
+    customer_id: string | null;
+    user_billing: UserBilling;
+    entitlements: Entitlement[];
+    agreements: Agreement[];
+}
+
+// Helpers
+const ensureArray = <T>(v: unknown): T[] => (Array.isArray(v) ? (v as  T[]) : []);
+
+
+/**
+ * Token generation workflow to add custom billing details claim to both the access token
+ * and ID token. It first retrieves the data with the Kinde API and then constructs a claim object
+ * and sets it as a custom claim in both tokens. 
+ * 
+ * Requirements:
+ * 
+ * 1. Create an M2M application in Kinde with the necessary billing API scopes:
+ *      - read:users - for fetching user details including billing information 1
+ *      - read:billing_entitlements - for accessing billing entitlements data
+ *      - read:billing_agreements - for accessing billing agreements data
+ * 
+ *     Docs: https://docs.kinde.com/developer-tools/kinde-api/about-m2m-scopes/
+ * 
+ * 2. Add the M2M application's client ID and secret to the Kinde environment variables:
+ *      - KINDE_M2M_CLIENT_ID
+ *      - KINDE_M2M_CLIENT_SECRET (mark as sensitive)
+ * 
+ *      Docs: https://docs.kinde.com/build/env-variables/store-environment-variables/
+ * 
+ * 3. Ensure that the user has an associated customer ID in their billing details.
+ * 
+ * 
+ * Once configured, this workflow will automatically add the billingDetails claim to tokens upon generation,
+ * that is, after client authentication.
+ * 
+ * 
+ * @param event - The event object containing the context and bindings
+ * @returns <void> - This function does not return a value, but the custom claims are set in the tokens 
+ */
 export default async function Workflow(event) {
     // TODO: Add error handling and edge case handling
-    // TODO: In the documentation, include the requiements for this workflow to work 
 
     // Logging for debugging purposes
     console.log("Token generation workflow with custom code executed");
@@ -23,40 +116,46 @@ export default async function Workflow(event) {
     const kindeAPI = await createKindeAPI(event);
 
     // [1] Get the relevant details to contruct the user billing claim object
-    // User object
-    const userId = event.context.user.id;
+    const userId = event.context?.user?.id;
+    if(!userId){
+        console.warn("No user id found in event.context.user.id — aborting workflow.");
+        return;
+    }
     console.log("User ID:", userId);
     // TODo: [optimization] use params
-    const { data: user } = await kindeAPI.get({
+    const { data: user } = await kindeAPI.get<UserResponse>({
         endpoint: `user?id=${userId}&expand=billing`,
     });
 
-    const customerId = user.billing?.customer_id;
+    const customerId = user?.billing?.customer_id ?? null;
     if (!customerId) {
         console.log("No customer ID found for user, skipping billing claim construction.");
         return;
     }
+
     // Entitlements
-    const { data: entitlements } = await kindeAPI.get({
+    const { data: entitlements } = await kindeAPI.get<EntitlementsResponse>({
         endpoint: `billing/entitlements?customer_id=${customerId}`
     });
     // Agreements
-    const { data: agreements } = await kindeAPI.get({
+    const { data: agreements } = await kindeAPI.get<AgreementsResponse>({
         endpoint: `billing/agreements?customer_id=${customerId}`
     });
 
 
     // [2] Construct the user billing claim object 
-    let billingClaimObject = {};
-    // customer ID key with value as a string
+    const billingClaimObject: BillingClaim = {
+        customer_id: customerId,
+        user_billing: user?.billing ?? {},
+        entitlements,
+        agreements
+    };
+    /*
     billingClaimObject["customer_id"] = customerId ? customerId : null;
-    // Billing section from the user object object call
     billingClaimObject["user_billing"] = user.billing ? user.billing : {};
-    // Entitlements array
     billingClaimObject['entitlements'] = entitlements ? entitlements.entitlements : [];
-    // Agreements array
     billingClaimObject['agreements'] = agreements ? agreements.agreements : [];
-
+    */
 
     // [3] Set the billing claim object in both the access token and ID token
     kinde.accessToken.setCustomClaim("billingDetails", billingClaimObject);
