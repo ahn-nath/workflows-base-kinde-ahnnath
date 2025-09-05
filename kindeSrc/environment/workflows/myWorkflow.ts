@@ -73,8 +73,8 @@ interface BillingClaim {
     agreements: Agreement[];
 }
 
-// Helpers - 
-// const ensureArray = <T>(v: unknown): T[] => (Array.isArray(v) ? (v as  T[]) : []);
+// Helpers 
+const ensureArray = <T>(v: unknown): T[] => (Array.isArray(v) ? (v as  T[]) : []);
 
 
 /**
@@ -133,14 +133,18 @@ export default async function Workflow(event) {
         return;
     }
 
-    // Entitlements
-    const { data: entitlements } = await kindeAPI.get<EntitlementsResponse>({
+    // Entitlements and Agreements
+    const [entResp, agrResp] = await Promise.all([
+        kindeAPI.get<EntitlementsResponse>({
         endpoint: `billing/entitlements?customer_id=${customerId}`
-    });
-    // Agreements
-    const { data: agreements } = await kindeAPI.get<AgreementsResponse>({
+    }),
+        kindeAPI.get<AgreementsResponse>({
         endpoint: `billing/agreements?customer_id=${customerId}`
-    });
+    }),
+    ]);
+
+    const entitlements = ensureArray<Entitlement>(entResp?.data?.entitlements);
+    const agreements = ensureArray<Agreement>(agrResp?.data?.agreements);
 
 
     // [2] Construct the user billing claim object 
@@ -150,12 +154,6 @@ export default async function Workflow(event) {
         entitlements,
         agreements
     };
-    /*
-    billingClaimObject["customer_id"] = customerId ? customerId : null;
-    billingClaimObject["user_billing"] = user.billing ? user.billing : {};
-    billingClaimObject['entitlements'] = entitlements ? entitlements.entitlements : [];
-    billingClaimObject['agreements'] = agreements ? agreements.agreements : [];
-    */
 
     // [3] Set the billing claim object in both the access token and ID token
     kinde.accessToken.setCustomClaim("billingDetails", billingClaimObject);
