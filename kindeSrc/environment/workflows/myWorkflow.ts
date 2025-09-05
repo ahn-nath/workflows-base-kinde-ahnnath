@@ -74,7 +74,7 @@ interface BillingClaim {
 }
 
 // Helpers 
-const ensureArray = <T>(v: unknown): T[] => (Array.isArray(v) ? (v as  T[]) : []);
+const ensureArray = <T,>(v: unknown): T[] => (Array.isArray(v) ? (v as  T[]) : []);
 
 
 /**
