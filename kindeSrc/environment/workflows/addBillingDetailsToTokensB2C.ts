@@ -7,8 +7,8 @@ import {
 
 export const workflowSettings: WorkflowSettings = {
     id: "onTokenGeneration",
-    name: "AddBillingDetailsToTokens",
-    trigger: WorkflowTrigger.UserTokenGeneration, // "user:tokens_generation",
+    name: "AddBillingDetailsToTokensB2C",
+    trigger: WorkflowTrigger.UserTokenGeneration,
     failurePolicy: {
         action: "stop"
     },
@@ -108,54 +108,61 @@ const ensureArray = <T,>(v: unknown): T[] => (Array.isArray(v) ? (v as  T[]) : [
  * @returns <void> - This function does not return a value, but the custom claims are set in the tokens 
  */
 export default async function Workflow(event) {
-    // TODO: Add error handling and edge case handling
+    try{
+        console.log("Token generation workflow with custom code executed");
 
-    // Logging for debugging purposes
-    console.log("Token generation workflow with custom code executed");
-    // Init 
-    const kindeAPI = await createKindeAPI(event);
+        const kindeAPI = await createKindeAPI(event);
 
-    // [1] Get the relevant details to contruct the user billing claim object
-    const userId = event.context?.user?.id;
-    if(!userId){
-        console.warn("No user id found in event.context.user.id — aborting workflow.");
-        return;
-    }
-    console.log("User ID:", userId);
-    // TODo: [optimization] use params
-    const { data: user } = await kindeAPI.get<UserResponse>({
-        endpoint: `user?id=${userId}&expand=billing`,
-    });
+        // [1] Get the relevant details to contruct the user billing claim object
+        const userId = event.context?.user?.id;
+        if(!userId){
+            console.warn("No user id found in event.context.user.id — aborting workflow.");
+            return;
+        }
 
-    const customerId = user?.billing?.customer_id ?? null;
-    if (!customerId) {
-        console.log("No customer ID found for user, skipping billing claim construction.");
-        return;
-    }
+        const { data: user } = await kindeAPI.get<UserResponse>({
+            endpoint: `user?id=${userId}&expand=billing`,
+        });
 
-    // Entitlements and Agreements
-    const [entResp, agrResp] = await Promise.all([
-        kindeAPI.get<EntitlementsResponse>({
-        endpoint: `billing/entitlements?customer_id=${customerId}`
-    }),
-        kindeAPI.get<AgreementsResponse>({
-        endpoint: `billing/agreements?customer_id=${customerId}`
-    }),
-    ]);
+        const customerId = user?.billing?.customer_id ?? null;
+        if (!customerId) {
+            console.info("No customer ID found for user, skipping billing claim construction.");
+            return;
+        }
 
-    const entitlements = ensureArray<Entitlement>(entResp?.data?.entitlements);
-    const agreements = ensureArray<Agreement>(agrResp?.data?.agreements);
+        // Entitlements and Agreements
+        const [entResp, agrResp] = await Promise.all([
+            kindeAPI.get<EntitlementsResponse>({
+            endpoint: `billing/entitlements?customer_id=${customerId}`
+        }),
+            kindeAPI.get<AgreementsResponse>({
+            endpoint: `billing/agreements?customer_id=${customerId}`
+        }),
+        ]);
+
+        const entitlements = ensureArray<Entitlement>(entResp?.data?.entitlements);
+        const agreements = ensureArray<Agreement>(agrResp?.data?.agreements);
 
 
-    // [2] Construct the user billing claim object 
-    const billingClaimObject: BillingClaim = {
-        customer_id: customerId,
-        user_billing: user?.billing ?? {},
-        entitlements,
-        agreements
-    };
+        // [2] Construct the user billing claim object 
+        const billingClaimObject: BillingClaim = {
+            customer_id: customerId,
+            user_billing: user?.billing ?? {},
+            entitlements,
+            agreements
+        };
 
-    // [3] Set the billing claim object in both the access token and ID token
-    kinde.accessToken.setCustomClaim("billingDetails", billingClaimObject);
-    kinde.idToken.setCustomClaim("billingDetails", billingClaimObject);
+        // [3] Set the billing claim object in both the access token and ID token
+        kinde.accessToken.setCustomClaim("billingDetails", billingClaimObject);
+        kinde.idToken.setCustomClaim("billingDetails", billingClaimObject);
+
+        console.log(`billingDetails claim set on accessToken and idToken for user ${userId}: ${billingClaimObject}`);
+
+
+}
+ catch (err){
+        console.error("Workflow error:", (err as Error).message ?? err);
+
+        throw err;
+ }
 }
