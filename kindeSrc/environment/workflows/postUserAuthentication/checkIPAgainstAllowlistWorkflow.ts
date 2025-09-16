@@ -13,5 +13,5 @@ export const workflowSettings: WorkflowSettings = {
 
 // The workflow code to be executed when the event is triggered
 export default async function handlePostAuth(event: onPostAuthenticationEvent) {
-  console.log("Hello world this is my first line for the workflow `Check IP Against Allowlist Workflow`");
+  console.log("Hello this is my first line for the workflow `Check IP Against Allowlist Workflow`");
 }
