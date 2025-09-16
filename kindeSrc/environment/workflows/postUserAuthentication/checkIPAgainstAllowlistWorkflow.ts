@@ -6,7 +6,7 @@ import {
 
 // The setting for this workflow
 export const workflowSettings: WorkflowSettings = {
-  id: "checkIPAgainstAllowlist",
+  id: "onPostUserAuthentication",
   name: "checkIPAgainstAllowlist",
   trigger: WorkflowTrigger.PostAuthentication,
 };
