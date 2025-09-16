@@ -7,7 +7,7 @@ import {
 // The setting for this workflow
 export const workflowSettings: WorkflowSettings = {
   id: "checkIPAgainstAllowlist",
-  name: "check IP against allowlist",
+  name: "checkIPAgainstAllowlist",
   trigger: WorkflowTrigger.PostAuthentication,
 };
 
