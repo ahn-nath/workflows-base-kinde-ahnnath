@@ -94,6 +94,9 @@ export default async function handlePostAuth(event: onPostAuthenticationEvent) {
     denyAccess(`Access denied: Invalid or private IP address.`);
   }
 
+
+  console.log("Allowlist and IP address validation passed.");
+  
   // 3. Deny or allow access 
   if (!allowList.includes(ip)) {
     denyAccess(`Access denied: IP address ${ip} is not in the allowlist.`);
