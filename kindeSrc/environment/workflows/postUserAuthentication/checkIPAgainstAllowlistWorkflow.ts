@@ -20,6 +20,9 @@ export const workflowSettings: WorkflowSettings = {
   name: "checkIPAgainstAllowlist",
   failurePolicy: { action: 'stop' },
   trigger: WorkflowTrigger.PostAuthentication,
+  bindings: {
+  "kinde.auth": {},
+  }
 };
 
 
