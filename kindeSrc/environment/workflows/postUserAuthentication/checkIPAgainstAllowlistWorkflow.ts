@@ -85,7 +85,7 @@ export default async function handlePostAuth(event: onPostAuthenticationEvent) {
   // 2. Get and validate IP address
   let ip = event.request.ip?.split(',')[0].trim() ?? 'unknown';
   // ip = '64.227.0.197'; // A known "allowed" IP for testing purposes
-  console.log(`User IP address: ${ip}`); // TODO: to be removed
+  console.log(`User IP address id the following: ${ip}`); // TODO: to be removed
 
   // Validate IP address
   if (!isValidIpAddress(ip)) {
