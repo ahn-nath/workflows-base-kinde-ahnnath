@@ -89,6 +89,7 @@ export default async function handlePostAuth(event: onPostAuthenticationEvent) {
 
   // Validate IP address
   if (!isValidIpAddress(ip)) {
+    console.log("We hit an issue here");
     console.warn(`Invalid or private IP address detected: ${ip}. Access denied.`);
     denyAccess(`Access denied: Invalid or private IP address.`);
   }
