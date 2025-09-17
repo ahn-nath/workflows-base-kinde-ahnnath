@@ -19,6 +19,10 @@ export const workflowSettings: WorkflowSettings = {
   id: "onPostUserAuthentication",
   name: "checkIPAgainstAllowlist",
   trigger: WorkflowTrigger.PostAuthentication,
+  bindings: {
+    'kinde.auth': {},
+    'kinde.env': {}
+  }
 };
 
 
@@ -50,7 +54,7 @@ function validateAllowList(allowList: string[]): void {
  * @param error The original error object (optional).
  */
 function handleExceptionError(errorMessage: string, error?: any): void {
-  console.error(`AbuseIPDB Workflow Error: ${errorMessage}`, error); // TODO: to be modified
+  console.error(`Check Againts IP Address Workflow Error: ${errorMessage}`, error); // TODO: to be modified
   denyAccess(`Access blocked due to an issue: ${errorMessage}`);
 }
 
@@ -72,7 +76,7 @@ function isValidIpAddress(ip: string): boolean {
 
 // --- Main Workflow Handler ---
 export default async function handlePostAuth(event: onPostAuthenticationEvent) {
-  console.log("Hello this is my first line for the workflow `Check IP Against Allowlist Workflow`");
+  console.log("Check IP Against Allowlist Workflow started");
 
   // TODO: We need to validate if this is expected
   // 1. Retrieve and validate allowlist
