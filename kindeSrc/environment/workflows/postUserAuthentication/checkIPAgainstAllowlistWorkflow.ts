@@ -1,14 +1,44 @@
+/**
+ * Allowlist IP Check Workflow
+ *
+ * This workflow runs after user authentication and enforces an IP allowlist.
+ * It validates the configured allowlist, extracts the client's IP from the
+ * authentication event, validates the IP format, and either grants or denies
+ * access depending on whether the IP is present in the allowlist.
+ *
+ * Key behaviors:
+ *  - Validates the allowlist is a non-empty array of valid IPv4 addresses.
+ *  - Extracts the client's IP from `event.request.ip` (first value when CSV).
+ *  - Supports a developer test mode to override the detected IP for testing.
+ *  - Denies access when IP is missing/invalid or not present in the allowlist.
+ *  - Logs warnings and errors; on unexpected exceptions denies access.
+ *
+ * Recommended updates:
+ *  - allowList: Update the `allowList` array with the desired IP addresses to allow.
+ *
+ * Testing:
+ *  - Enable ALLOWLIST_TEST_FALSE_POSITIVE (or set testFalsePositive = true)
+ *    to force the workflow to use a known test IP for functional verification.
+ *  - Use an authentication event with `request.ip` in CSV format (e.g.
+ *    "203.0.113.5, 10.0.0.1") to verify the first IP segment is used.
+ *
+ * Failure & error handling:
+ *  - Invalid allowlist or invalid IP -> denyAccess with descriptive message.
+ *  - Unexpected exceptions -> logged to console and denyAccess invoked.
+ *
+ */
+
+
+
 import {
   onPostAuthenticationEvent,
   WorkflowSettings,
   WorkflowTrigger,
-  getEnvironmentVariable,
   denyAccess,
 } from "@kinde/infrastructure";
 
 
 // --- Configuration ---
-// TODO: it should be included in the documentation to set this up
 const allowList = [
   '64.227.0.197',
 ]
@@ -25,9 +55,6 @@ export const workflowSettings: WorkflowSettings = {
   "kinde.auth": {},
   }
 };
-
-
-// --- Interfaces ---
 
 // --- Helper functions ---
 
@@ -55,7 +82,7 @@ function validateAllowList(allowList: string[]): void {
  * @param error The original error object (optional).
  */
 function handleExceptionError(errorMessage: string, error?: any): void {
-  console.error(`Check Againts IP Address Workflow Error: ${errorMessage}`, error); // TODO: to be modified
+  console.error(`Check Againts IP Address Workflow Error: ${errorMessage}`, error); 
   denyAccess(`Access blocked due to an issue: ${errorMessage}`);
 }
 
