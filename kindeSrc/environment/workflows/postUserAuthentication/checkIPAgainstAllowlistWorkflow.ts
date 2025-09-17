@@ -78,7 +78,6 @@ function isValidIpAddress(ip: string): boolean {
 export default async function handlePostAuth(event: onPostAuthenticationEvent) {
   console.log("Check IP Against Allowlist Workflow started");
 
-  // TODO: We need to validate if this is expected
   // 1. Retrieve and validate allowlist
   validateAllowList(allowList);
 
@@ -93,13 +92,13 @@ export default async function handlePostAuth(event: onPostAuthenticationEvent) {
     denyAccess(`Access denied: Invalid or private IP address.`);
   }
 
-
   console.log("Allowlist and IP address validation passed.");
 
   // 3. Deny or allow access 
   if (!allowList.includes(ip)) {
     console.warn(`IP address ${ip} is not in the allowlist. Access denied.`);
     denyAccess(`Access denied: IP address ${ip} is not in the allowlist.`);
+    return;
   }
 
   console.log('IP check completed successfully. Access granted.');
