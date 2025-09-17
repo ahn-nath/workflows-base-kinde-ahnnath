@@ -79,32 +79,38 @@ function isValidIpAddress(ip: string): boolean {
 export default async function handlePostAuth(event: onPostAuthenticationEvent) {
   console.log("Check IP Against Allowlist Workflow started");
 
-  // 1. Retrieve and validate allowlist
-  validateAllowList(allowList);
+  try {
+    // 1. Retrieve and validate allowlist
+    validateAllowList(allowList);
 
-  // 2. Get and validate IP address
-  let ip = event.request.ip?.split(',')[0].trim() ?? 'unknown';
-  if (testFalsePositive) {
-    ip = '64.227.0.197'; // A known "allowed" IP for testing purposes
-    console.log('Test false positive is enabled. Overriding IP for testing purposes.');
+    // 2. Get and validate IP address
+    let ip = event.request.ip?.split(',')[0].trim() ?? 'unknown';
+    if (testFalsePositive) {
+      ip = '64.227.0.197'; // A known "allowed" IP for testing purposes
+      console.log('Test false positive is enabled. Overriding IP for testing purposes.');
+    }
+
+    // Validate IP address
+    if (!isValidIpAddress(ip)) {
+      console.warn(`Invalid or private IP address detected: ${ip}. Access denied.`);
+      denyAccess(`Access denied: Invalid or private IP address.`);
+      return;
+    }
+
+    console.log("Allowlist and IP address validation passed.");
+
+    // 3. Deny or allow access 
+    if (!allowList.includes(ip)) {
+      console.warn(`IP address ${ip} is not in the allowlist. Access denied.`);
+      denyAccess(`Access denied: IP address ${ip} is not in the allowlist.`);
+      return;
+    }
+
+    console.log('IP check completed successfully. Access granted.');
+  } 
+  
+  catch (error: any) {
+    handleExceptionError(error.message, error);
   }
-
-  // Validate IP address
-  if (!isValidIpAddress(ip)) {
-    console.warn(`Invalid or private IP address detected: ${ip}. Access denied.`);
-    denyAccess(`Access denied: Invalid or private IP address.`);
-    return;
-  }
-
-  console.log("Allowlist and IP address validation passed.");
-
-  // 3. Deny or allow access 
-  if (!allowList.includes(ip)) {
-    console.warn(`IP address ${ip} is not in the allowlist. Access denied.`);
-    denyAccess(`Access denied: IP address ${ip} is not in the allowlist.`);
-    return;
-  }
-
-  console.log('IP check completed successfully. Access granted.');
 
 }
