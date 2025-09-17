@@ -12,6 +12,7 @@ import {
 const allowList = [
   '64.227.0.197',
 ]
+const testFalsePositive = true; 
 
 
 // --- Workflow Settings ---
@@ -83,13 +84,16 @@ export default async function handlePostAuth(event: onPostAuthenticationEvent) {
 
   // 2. Get and validate IP address
   let ip = event.request.ip?.split(',')[0].trim() ?? 'unknown';
-  // ip = '64.227.0.197'; // A known "allowed" IP for testing purposes
-  console.log(`User IP address id the following: ${ip}`);
+  if (testFalsePositive) {
+    ip = '64.227.0.197'; // A known "allowed" IP for testing purposes
+    console.log('Test false positive is enabled. Overriding IP for testing purposes.');
+  }
 
   // Validate IP address
   if (!isValidIpAddress(ip)) {
     console.warn(`Invalid or private IP address detected: ${ip}. Access denied.`);
     denyAccess(`Access denied: Invalid or private IP address.`);
+    return;
   }
 
   console.log("Allowlist and IP address validation passed.");
