@@ -37,8 +37,8 @@ export default async function Workflow(event: onExistingPasswordProvidedEvent) {
   console.log("Hitting the drip migration workflow...")
 
   console.log("User details:")
-  console.log(providedEmail)
-  console.log(password)
+  console.log("providedEmail", providedEmail)
+  console.log("providedPassword", password)
 
   if (hasUserRecordInKinde) {
     console.log('User exists in Kinde');
@@ -85,7 +85,7 @@ export default async function Workflow(event: onExistingPasswordProvidedEvent) {
             type: 'email',
             is_verified: !!userData.email_verified,
             details: {
-              email: providedEmail
+              email: "ahn.nathaly@gmail.com"
             }
           }
         ]
