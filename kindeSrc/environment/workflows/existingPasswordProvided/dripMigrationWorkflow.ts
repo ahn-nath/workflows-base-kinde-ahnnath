@@ -36,6 +36,10 @@ export default async function Workflow(event: onExistingPasswordProvidedEvent) {
 
   console.log("Hitting the drip migration workflow...")
 
+  console.log("User details:")
+  console.log(providedEmail)
+  console.log(password)
+
   if (hasUserRecordInKinde) {
     console.log('User exists in Kinde');
     return;
