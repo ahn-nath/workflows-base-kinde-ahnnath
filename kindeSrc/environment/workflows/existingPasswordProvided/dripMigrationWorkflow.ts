@@ -41,7 +41,7 @@ export default async function Workflow(event: onExistingPasswordProvidedEvent) {
   console.log("providedPassword", password)
 
 
-  if (hasUserRecordInKinde) {
+  if (!hasUserRecordInKinde) {
     console.log('User exists in Kinde');
     return;
   }
