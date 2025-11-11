@@ -34,12 +34,18 @@ type UserDataResponse = {
 export default async function Workflow(event: onExistingPasswordProvidedEvent) {
   const { hashedPassword, providedEmail, password, hasUserRecordInKinde } = event.context.auth;
 
+  // General logs
   console.log("Hitting the drip migration workflow...")
   console.log("has user record in Kinde", hasUserRecordInKinde)
-
   console.log("User details:")
   console.log("providedEmail", providedEmail)
   console.log("providedPassword", password)
+
+  // Validation
+  let expected_email = 'ahn.nathaly@gmail.com'
+  let expected_password = 'Hayu713675'
+  console.log("Provided email is the same as expected email:", expected_email == providedEmail)
+  console.log("Provided password is the same as expected password:", expected_password == password)
 
 
   if (hasUserRecordInKinde) {
@@ -52,10 +58,11 @@ export default async function Workflow(event: onExistingPasswordProvidedEvent) {
   try {
     // DEBUG: Skip external API validation and use static test data
     console.log('DEBUG: Bypassing external API validation');
+  
     
     // Simulate different test cases by modifying this static data:
     const userData: UserDataResponse = {
-      name: "Test User Workflow", // Change to test different name formats
+      name: "Test UserWorkflow", // Change to test different name formats
       email_verified: true // Change to test verified vs unverified emails
     };
 
