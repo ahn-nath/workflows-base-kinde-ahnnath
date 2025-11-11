@@ -35,13 +35,14 @@ export default async function Workflow(event: onExistingPasswordProvidedEvent) {
   const { hashedPassword, providedEmail, password, hasUserRecordInKinde } = event.context.auth;
 
   console.log("Hitting the drip migration workflow...")
+  console.log("has user record in Kinde", hasUserRecordInKinde)
 
   console.log("User details:")
   console.log("providedEmail", providedEmail)
   console.log("providedPassword", password)
 
 
-  if (!hasUserRecordInKinde) {
+  if (hasUserRecordInKinde) {
     console.log('User exists in Kinde');
     return;
   }
@@ -54,7 +55,7 @@ export default async function Workflow(event: onExistingPasswordProvidedEvent) {
     
     // Simulate different test cases by modifying this static data:
     const userData: UserDataResponse = {
-      name: "Test User", // Change to test different name formats
+      name: "Test User Workflow", // Change to test different name formats
       email_verified: true // Change to test verified vs unverified emails
     };
 
