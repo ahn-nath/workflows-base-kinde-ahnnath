@@ -5,9 +5,9 @@ import {
 } from "@kinde/infrastructure";
 
 export const workflowSettings: WorkflowSettings = {
-    id: "onTokenGeneration", // "onPreRegistration",
+    id: "onPreRegistration",
     name: "LogUserEmail",
-    trigger: WorkflowTrigger.UserTokenGeneration,
+    trigger: WorkflowTrigger.UserPreRegistration,
     failurePolicy: {
         action: "stop"
     },
