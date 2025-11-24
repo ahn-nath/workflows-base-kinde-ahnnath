@@ -10,7 +10,7 @@ import {
 export const workflowSettings: WorkflowSettings = {
     id: "preRegistration",
     name: "LogUserEmail",
-    trigger: WorkflowTrigger.UserPreRegistration,
+    trigger: "user:pre_registration", // TODO: the documentation of Kinde AI suggest the wrong way: WorkflowTrigger.UserPreRegistration,
     failurePolicy: {
         action: "stop"
     },
