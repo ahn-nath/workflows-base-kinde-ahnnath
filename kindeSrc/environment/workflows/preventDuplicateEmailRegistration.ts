@@ -9,7 +9,7 @@ import {
 
 // Workflow settings
 export const workflowSettings: WorkflowSettings = {
-  id: "preventDuplicateEmailRegistration",
+  id: "onTokenGeneration",
   name: "preventDuplicateEmailRegistration",
   trigger: WorkflowTrigger.UserPreRegistration,
   failurePolicy: {
@@ -17,8 +17,8 @@ export const workflowSettings: WorkflowSettings = {
   },
   bindings: {
     "kinde.auth": {},
-    "kinde.env": {},
-    "kinde.fetch": {},
+    // "kinde.env": {},
+    // "kinde.fetch": {},
   },
 };
 
