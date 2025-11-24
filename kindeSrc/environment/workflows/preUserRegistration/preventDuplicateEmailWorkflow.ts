@@ -5,9 +5,9 @@ import {
 } from "@kinde/infrastructure";
 
 export const workflowSettings: WorkflowSettings = {
-    id: "onPreRegistration",
+    id: "onTokenGeneration", // "onPreRegistration",
     name: "LogUserEmail",
-    trigger: WorkflowTrigger.UserPreRegistration,
+    trigger: WorkflowTrigger.UserTokenGeneration,
     failurePolicy: {
         action: "stop"
     },
@@ -16,10 +16,6 @@ export const workflowSettings: WorkflowSettings = {
     }
 };
 
-export default async function Workflow(event: any) {
+export default async function Workflow2(event: any) {
   console.log("Pre-registration event triggered", event);
-  
-  if (event.context.user?.email) {
-    console.log(`New user attempting to register: ${event.context.user.email}`);
-  }
 }
