@@ -10,7 +10,7 @@ import {
 // Workflow settings
 export const workflowSettings: WorkflowSettings = {
   id: "preventDuplicateEmailRegistration",
-  name: "Prevent Duplicate Email Registration",
+  name: "preventDuplicateEmailRegistration",
   trigger: WorkflowTrigger.UserPreRegistration,
   failurePolicy: {
     action: "stop",
@@ -22,6 +22,7 @@ export const workflowSettings: WorkflowSettings = {
   },
 };
 
+/*
 // Helper function to check if user exists
 async function checkIfUserExists(
   event: onUserPreRegistrationEvent,
@@ -47,9 +48,10 @@ async function checkIfUserExists(
     return false;
   }
 }
+*/
 
 // Main workflow function
-export default async function Workflow(
+export default async function preRegistrationWorkflow(
   event: onUserPreRegistrationEvent
 ) {
   console.log("Pre-registration workflow triggered", event);
