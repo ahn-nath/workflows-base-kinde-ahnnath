@@ -3,15 +3,15 @@ import {
   WorkflowSettings,
   WorkflowTrigger,
   denyAccess,
-  createKindeAPI,
-  getEnvironmentVariable,
+  // createKindeAPI,
+  // getEnvironmentVariable,
 } from "@kinde/infrastructure";
 
 // Workflow settings
 export const workflowSettings: WorkflowSettings = {
-  id: "onTokenGeneration",
+  id: "onUserPreregistration",
   name: "preventDuplicateEmailRegistration",
-  trigger: WorkflowTrigger.UserPreRegistration,
+  trigger: WorkflowTrigger.UserTokenGeneration,
   failurePolicy: {
     action: "stop",
   },
@@ -51,9 +51,7 @@ async function checkIfUserExists(
 */
 
 // Main workflow function
-export default async function preRegistrationWorkflow(
-  event: onUserPreRegistrationEvent
-) {
+export default async function preRegistrationWorkflow(event) {
   console.log("Pre-registration workflow triggered", event);
 
   // Check if user email exists in the event
