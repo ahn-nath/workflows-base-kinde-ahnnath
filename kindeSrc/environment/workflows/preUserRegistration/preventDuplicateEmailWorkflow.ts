@@ -2,17 +2,21 @@ import {
     // createKindeAPI, 
     WorkflowSettings, 
     WorkflowTrigger,
+    onUserPreRegistrationEvent,
+    denyAccess,
+    getEnvironmentVariable,
 } from "@kinde/infrastructure";
 
 export const workflowSettings: WorkflowSettings = {
-    id: "onPreRegistration",
+    id: "preRegistration",
     name: "LogUserEmail",
     trigger: WorkflowTrigger.UserPreRegistration,
     failurePolicy: {
         action: "stop"
     },
     bindings: {
-        "kinde.env": {}
+        "kinde.env": {},
+        "kinde.auth": {}
     }
 };
 
