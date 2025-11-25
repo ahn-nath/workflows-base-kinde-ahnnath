@@ -16,11 +16,11 @@ export const workflowSettings: WorkflowSettings = {
     },
     bindings: {
         "kinde.env": {},
-        "kinde.auth": {}
+        "kinde.auth": {},
     }
 };
 
-export default async function Workflow2(event: any) {
+export default async function Workflow2(event: onUserPreRegistrationEvent) {
   console.log("Pre-registration event triggered", event);
 
   const user_email = event.context.user?.email; 
