@@ -23,16 +23,19 @@ export const workflowSettings: WorkflowSettings = {
 export default async function Workflow2({request, context}) {
   console.log("Pre-registration event triggered", request);
 
-  const user_email = context.user.email; 
+  // context.user.email;
+  // NOTE: We are using fixed value because we do not receive the email in context with username auth method (potential bug)
+  const user_email = "nathaly@teamkinde.com"  
   console.log("Email received for this workflow was:", user_email)
 
   console.log("Request data:", JSON.stringify(request, null, 2));
   console.log("Context data:", JSON.stringify(context, null, 2));
 
-  if(user_email == "nathaly13toledo@gmail.com"){
-    console.log("Same emails!!!!!!!");
+  if(user_email == "nathaly@teamkinde.com"){
+    denyAccess("Existing email detected"); 
   }
   else{
-    console.log("NOT THE SAME EMAILS!!!!")
+    console.log("Allowing registration"); 
   }
+
 }
