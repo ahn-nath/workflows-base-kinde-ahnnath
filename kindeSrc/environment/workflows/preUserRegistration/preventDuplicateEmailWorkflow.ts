@@ -22,4 +22,7 @@ export const workflowSettings: WorkflowSettings = {
 
 export default async function Workflow2(event: any) {
   console.log("Pre-registration event triggered", event);
+
+  const user_email = event.context.user?.email; 
+  console.log("Email received for this workflow was:", user_email)
 }
