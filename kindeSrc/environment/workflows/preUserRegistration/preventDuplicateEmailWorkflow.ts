@@ -32,7 +32,7 @@ export default async function Workflow2({request, context}) {
   if(user_email == "nathaly12toledo@gmail.com"){
     console.log("Same emails!!!!!!!");
   }
-  {
+  else{
     console.log("NOT THE SAME EMAILS!!!!")
   }
 }
