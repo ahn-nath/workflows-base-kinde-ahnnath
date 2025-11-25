@@ -28,4 +28,11 @@ export default async function Workflow2({request, context}) {
 
   console.log("Request data:", JSON.stringify(request, null, 2));
   console.log("Context data:", JSON.stringify(context, null, 2));
+
+  if(user_email == "nathaly12toledo@gmail.com"){
+    console.log("Same emails!!!!!!!");
+  }
+  {
+    console.log("NOT THE SAME EMAILS!!!!")
+  }
 }
