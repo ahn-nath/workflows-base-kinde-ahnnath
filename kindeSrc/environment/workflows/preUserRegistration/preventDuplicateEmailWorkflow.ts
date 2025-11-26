@@ -9,7 +9,7 @@ import {
 export const workflowSettings: WorkflowSettings = {
     id: "preRegistration",
     name: "LogUserEmail",
-    trigger: "user:pre_registration", // TODO: the documentation of Kinde AI suggest the wrong way: WorkflowTrigger.UserPreRegistration,
+    trigger: "user:pre_registration",
     failurePolicy: {
         action: "stop"
     },
@@ -17,6 +17,7 @@ export const workflowSettings: WorkflowSettings = {
         "kinde.env": {},
         "kinde.auth": {},
         "kinde.fetch": {},
+         url: {} // Enables URLSearchParams in the workflow environment
     }
 };
 
@@ -90,7 +91,7 @@ async function checkIfUserExists(
     const { data: users } = await kindeAPI.get({
       endpoint: `users?email=${encodeURIComponent(email)}`,
     });
-    console.log("ERROR:", users); 
+    console.log("Result:", users); 
 
     // Check if any users were found
     return users && users.users && users.users.length > 0;
@@ -109,27 +110,14 @@ async function checkIfUserExists(
  * Pre-registration workflow entry point that blocks duplicate sign-ups by email.
  * @param event Kinde pre-registration event containing request/context metadata.
  */
+
 export default async function Workflow2(event: onUserPreRegistrationEvent) {
   console.log("Pre-registration event triggered", event);
 
   // event.context.user.email;
   // NOTE: We are using fixed value because we do not receive the email in context with username auth method (potential bug)
   // Retrieve the email the user is using for registration [1]
-  const user_email = "nathaly@teamkinde.com" // context.user.email
-
-  // TODO 2: remove this
-  console.log("Request data:", JSON.stringify(event.request, null, 2));
-  console.log("Context data:", JSON.stringify(event.context, null, 2));
-
-  // TODO 3: remove this
-  /*
-  if(user_email == "nathaly@teamkinde.com"){
-    denyAccess("Existing email detected"); 
-  }
-  else{
-    console.log("Allowing registration"); 
-  }
-  */ 
+  const user_email = "nathaly@teamkinde.com" // context.user.email 
 
   // Use Kinde Management API to check if user already exists
   // If exists, block registration
