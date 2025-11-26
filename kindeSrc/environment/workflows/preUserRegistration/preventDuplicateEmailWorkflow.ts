@@ -71,7 +71,12 @@ function formatErrorForLogging(error: unknown) {
 }
 
 
-// Helper function to check if user exists
+/**
+ * Determines whether the supplied email already belongs to an existing Kinde user.
+ * @param event Workflow event providing auth context for the Management API.
+ * @param email Email address to query in the tenant.
+ * @returns `true` if at least one user record matches the email; otherwise `false`.
+ */
 async function checkIfUserExists(
   event: onUserPreRegistrationEvent,
   email: string
@@ -100,8 +105,10 @@ async function checkIfUserExists(
   }
 }
 
-// TODO 1: replace it with type event
-// Main workflow function
+/**
+ * Pre-registration workflow entry point that blocks duplicate sign-ups by email.
+ * @param event Kinde pre-registration event containing request/context metadata.
+ */
 export default async function Workflow2(event: onUserPreRegistrationEvent) {
   console.log("Pre-registration event triggered", event);
 
