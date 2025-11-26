@@ -108,7 +108,7 @@ export default async function Workflow2(event: onUserPreRegistrationEvent) {
   // event.context.user.email;
   // NOTE: We are using fixed value because we do not receive the email in context with username auth method (potential bug)
   // Retrieve the email the user is using for registration [1]
-  const user_email = "nathaly12@teamkinde.com" // context.user.email 
+  const user_email = "nathaly@teamkinde.com" // context.user.email 
 
   // Use Kinde Management API to check if user already exists
   // If exists, block registration
