@@ -28,6 +28,7 @@ async function checkIfUserExists(
   email: string
 ): Promise<boolean> {
   try {
+    console.log("Calling the Kinde Management API");
     // Initialize Kinde Management API
     const kindeAPI = await createKindeAPI(event);
 
