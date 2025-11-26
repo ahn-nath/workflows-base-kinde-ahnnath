@@ -1,9 +1,8 @@
 import { 
-    // createKindeAPI, 
     WorkflowSettings, 
     onUserPreRegistrationEvent,
     denyAccess,
-    // getEnvironmentVariable,
+    getEnvironmentVariable,
     createKindeAPI,
 } from "@kinde/infrastructure";
 
@@ -36,6 +35,7 @@ async function checkIfUserExists(
     const { data: users } = await kindeAPI.get({
       endpoint: `users?email=${encodeURIComponent(email)}`,
     });
+    console.log("ERROR:", users); 
 
     // Check if any users were found
     return users && users.users && users.users.length > 0;
