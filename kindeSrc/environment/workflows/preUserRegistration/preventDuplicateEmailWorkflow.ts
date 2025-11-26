@@ -20,6 +20,56 @@ export const workflowSettings: WorkflowSettings = {
     }
 };
 
+type HttpError = Error & {
+  status?: number;
+  response?: {
+    status?: number;
+    statusText?: string;
+    data?: unknown;
+  };
+};
+
+function safeStringify(value: unknown) {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (typeof value === "string") {
+    return value;
+  }
+
+  try {
+    return JSON.stringify(value, null, 2);
+  } catch {
+    return "[unserializable value]";
+  }
+}
+
+function formatErrorForLogging(error: unknown) {
+  if (error instanceof Error) {
+    const httpError = error as HttpError;
+    return {
+      name: httpError.name,
+      message: httpError.message,
+      status: httpError.status ?? httpError.response?.status,
+      statusText: httpError.response?.statusText,
+      responseData: safeStringify(httpError.response?.data),
+      stack: httpError.stack,
+    };
+  }
+
+  if (typeof error === "object" && error !== null) {
+    return {
+      message: "Non-Error object thrown",
+      details: safeStringify(error),
+    };
+  }
+
+  return {
+    message: String(error),
+  };
+}
+
 
 // Helper function to check if user exists
 async function checkIfUserExists(
@@ -40,7 +90,11 @@ async function checkIfUserExists(
     // Check if any users were found
     return users && users.users && users.users.length > 0;
   } catch (error) {
-    console.error("Error checking if user exists:", error);
+    const serializedError = formatErrorForLogging(error);
+    console.error(
+      "Error checking if user exists:",
+      JSON.stringify(serializedError, null, 2)
+    );
     // On error, allow registration to proceed (fail open)
     return false;
   }
