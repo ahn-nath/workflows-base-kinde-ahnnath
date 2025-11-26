@@ -145,7 +145,7 @@ export default async function Workflow2(event: onUserPreRegistrationEvent) {
   
   if (userExists) {
     console.log(`Blocking registration for existing email: ${event.context.user.email}`);
-    denyAccess("An account with this email already exists. Please sign in instead.");
+    denyAccess("An account with this email already exists. Please sign in instead: http://localhost:3000/");
   }
 
 }
