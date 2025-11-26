@@ -17,6 +17,7 @@ export const workflowSettings: WorkflowSettings = {
         "kinde.env": {},
         "kinde.auth": {},
         "kinde.fetch": {},
+         url: {} // Enables URLSearchParams in the workflow environment
     }
 };
 
