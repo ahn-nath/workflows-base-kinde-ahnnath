@@ -30,6 +30,13 @@ type HttpError = Error & {
   };
 };
 
+type UsersResponse = {
+  users?: Array<{
+    id?: string;
+    email?: string;
+  }>;
+};
+
 function safeStringify(value: unknown) {
   if (value === undefined) {
     return undefined;
@@ -71,6 +78,10 @@ function formatErrorForLogging(error: unknown) {
   };
 }
 
+function isValidEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
 
 /**
  * Determines whether the supplied email already belongs to an existing Kinde user.
@@ -88,13 +99,13 @@ async function checkIfUserExists(
     const kindeAPI = await createKindeAPI(event);
 
     // Query users by email
-    const { data: users } = await kindeAPI.get({
+    const { data } = await kindeAPI.get<UsersResponse>({
       endpoint: `users?email=${encodeURIComponent(email)}`,
     });
-    console.log("Result:", users); 
+    console.log("Kinde Management API response:", data);
 
     // Check if any users were found
-    return users && users.users && users.users.length > 0;
+    return Boolean(data?.users?.length);
   } catch (error) {
     const serializedError = formatErrorForLogging(error);
     console.error(
@@ -114,14 +125,23 @@ async function checkIfUserExists(
 export default async function Workflow2(event: onUserPreRegistrationEvent) {
   console.log("Pre-registration event triggered", event);
 
-  // event.context.user.email;
-  // NOTE: We are using fixed value because we do not receive the email in context with username auth method (potential bug)
-  // Retrieve the email the user is using for registration [1]
-  const user_email = "nathaly@teamkinde.com" // context.user.email 
+  const userEmail = event.context?.user?.email;
+
+  if (!userEmail) {
+    console.error("Pre-registration event missing user email.");
+    denyAccess("Unable to process registration: email is required.");
+    return;
+  }
+
+  if (!isValidEmail(userEmail)) {
+    console.error("Invalid email format received:", userEmail);
+    denyAccess("Please provide a valid email address.");
+    return;
+  }
 
   // Use Kinde Management API to check if user already exists
   // If exists, block registration
-  const userExists = await checkIfUserExists(event, user_email);
+  const userExists = await checkIfUserExists(event, userEmail);
   
   if (userExists) {
     console.log(`Blocking registration for existing email: ${event.context.user.email}`);
