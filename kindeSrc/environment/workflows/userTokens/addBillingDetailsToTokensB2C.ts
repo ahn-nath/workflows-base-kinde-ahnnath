@@ -107,7 +107,7 @@ const ensureArray = <T,>(v: unknown): T[] => (Array.isArray(v) ? (v as  T[]) : [
  * @param event - The event object containing the context and bindings
  * @returns <void> - This function does not return a value, but the custom claims are set in the tokens 
  */
-export default async function Workflow(event) {
+export default async function Workflow3(event) {
     try{
         console.log("Token generation workflow with custom code executed");
 
