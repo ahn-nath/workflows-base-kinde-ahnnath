@@ -125,7 +125,7 @@ async function checkIfUserExists(
 export default async function Workflow2(event: onUserPreRegistrationEvent) {
   console.log("Pre-registration event triggered", event);
 
-  const userEmail = 'nathaly@teamkinde.com'  // event.context?.user?.email;
+  const userEmail = event.context?.user?.email;
 
   if (!userEmail) {
     console.error("Pre-registration event missing user email.");
