@@ -160,7 +160,6 @@ export default async function OrganizationBillingWorkflow(event: WorkflowEvent) 
         // [3] Construct the B2B Billing Claim Object
         const billingClaimObject: OrgBillingClaim = {
             customer_id: customerId,
-            org_billing: orgData?.billing ?? {},
             entitlements,
             agreements
         };
