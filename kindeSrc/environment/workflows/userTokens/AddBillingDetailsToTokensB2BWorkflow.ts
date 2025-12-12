@@ -151,7 +151,7 @@ export default async function OrganizationBillingWorkflow(event: WorkflowEvent) 
             !initialAgreements
             ? kindeAPI.get<AgreementsResponse>({
                 endpoint: `billing/agreements?customer_id=${customerId}`
-            }): Promise.resolve(null)
+            }): Promise.resolve(null)  
         ]);
 
         const entitlements = ensureArray<Entitlement>(entResp?.data?.entitlements);
