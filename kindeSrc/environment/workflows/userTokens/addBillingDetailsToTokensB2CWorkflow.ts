@@ -8,7 +8,7 @@ import {
 export const workflowSettings: WorkflowSettings = {
     id: "onTokenGeneration",
     name: "AddBillingDetailsToTokensB2C",
-    trigger: WorkflowTrigger.UserTokenGeneration,
+    // trigger: WorkflowTrigger.UserTokenGeneration,
     failurePolicy: {
         action: "stop"
     },
