@@ -3,6 +3,7 @@ import {
   WorkflowSettings,
   WorkflowTrigger,
   accessTokenCustomClaims,
+  denyAccess,
 } from "@kinde/infrastructure";
 
 export const workflowSettings: WorkflowSettings = {
@@ -16,4 +17,7 @@ export const workflowSettings: WorkflowSettings = {
 
 export default async function (event: onUserTokenGeneratedEvent) {
   console.log(event);
+
+  denyAccess("You are not allowed to access this resource");
+
 }
