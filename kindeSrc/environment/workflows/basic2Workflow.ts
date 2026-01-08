@@ -8,7 +8,7 @@ import {
 
 export const workflowSettings: WorkflowSettings = {
   id: "onUserTokenGeneration",
-  name: "Add custom claim to access token",
+  name: "Add the custom claim to access token",
   trigger: WorkflowTrigger.UserTokenGeneration,
   bindings: {
     "kinde.accessToken": {},
