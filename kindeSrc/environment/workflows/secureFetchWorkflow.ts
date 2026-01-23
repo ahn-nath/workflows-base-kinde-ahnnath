@@ -12,7 +12,7 @@ export const workflowSettings: WorkflowSettings = {
   name: "Post Authentication - Create/Update User in database",
   trigger: WorkflowTrigger.PostAuthentication,
   bindings: {
-    // "kinde.secureFetch": {},
+    "kinde.secureFetch": {},
     "kinde.env": {},
     url: {},
   },
@@ -53,6 +53,8 @@ export default async function createCustomerUser(event: onPostAuthenticationEven
     const bodyParams = toURLSearchParams(payload);
     console.log("Body params:", bodyParams.toString());
     
+
+    /*
     const response = await fetch(TEST_URL, {
       method: "POST",
       headers: {
@@ -60,6 +62,19 @@ export default async function createCustomerUser(event: onPostAuthenticationEven
       },
       body: bodyParams,
     });
+    */
+
+    const response = await secureFetch<{error?: string }>(
+      TEST_URL,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: bodyParams,
+        responseFormat: "json"
+      }
+    );
 
     console.log("response raw is:", response)
 
