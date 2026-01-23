@@ -1,5 +1,5 @@
 {
-  "name": "workflow-base-template",
+  "name": "kinde-workflow-examples",
   "version": "1.0.0",
   "description": "The most basic workflow template for a Kinde Workflow",
   "scripts": {
