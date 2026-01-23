@@ -2,7 +2,8 @@ import {
   onPostAuthenticationEvent,
   WorkflowSettings,
   WorkflowTrigger,
-  fetch
+  fetch, // confirmed that it works with fect
+  secureFetch
 } from "@kinde/infrastructure";
 
 // alredy did the binding
@@ -35,6 +36,8 @@ function toURLSearchParams(obj: Record<string, unknown>): URLSearchParams {
 
 export default async function createCustomerUser(event: onPostAuthenticationEvent) {
   console.log(event);
+
+  console.log("nathalytoledo@gmail.com")
 
   console.log("Standard Fecth test...");
 
