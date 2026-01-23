@@ -1,9 +1,10 @@
+
+import fetch from "node-fetch";
 import {
   onPostAuthenticationEvent,
   WorkflowSettings,
   WorkflowTrigger,
 } from "@kinde/infrastructure";
-import fetch from "node-fetch";
 
 // alredy did the binding
 export const workflowSettings: WorkflowSettings = {
