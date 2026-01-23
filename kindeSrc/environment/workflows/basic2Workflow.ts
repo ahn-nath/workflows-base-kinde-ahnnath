@@ -18,7 +18,7 @@ export const workflowSettings: WorkflowSettings = {
 
 export default async function (event: onUserTokenGeneratedEvent) {
   console.log(event);
-
+  // denyAccess
   console.log("You are not allowed to access this resource!");
 
 }
