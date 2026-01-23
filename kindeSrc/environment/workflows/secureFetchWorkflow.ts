@@ -3,6 +3,7 @@ import {
   WorkflowSettings,
   WorkflowTrigger,
 } from "@kinde/infrastructure";
+import fetch from "node-fetch";
 
 // alredy did the binding
 export const workflowSettings: WorkflowSettings = {

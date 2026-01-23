@@ -18,6 +18,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@kinde/infrastructure": "0.6.0"
+    "@kinde/infrastructure": "0.6.0",
+    "node-fetch": "^3.3.2"
   }
 }
