@@ -16,6 +16,8 @@ export const workflowSettings: WorkflowSettings = {
   },
 };
 
+// https://webhook.site/9cc73bd5-80cb-4be4-8e5a-da9c8895f1f0
+
 const TEST_URL = "https://webhook.site/9cc73bd5-80cb-4be4-8e5a-da9c8895f1f0"
 
 
@@ -42,12 +44,17 @@ export default async function createCustomerUser(event: onPostAuthenticationEven
   };
 
   try{
-     const response = await fetch(TEST_URL, {
+    console.log("Attempting fetch to:", TEST_URL);
+    console.log("Payload:", payload);
+    const bodyParams = toURLSearchParams(payload);
+    console.log("Body params:", bodyParams.toString());
+    
+    const response = await fetch(TEST_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
       },
-      body: toURLSearchParams(payload),
+      body: bodyParams,
     });
 
     console.log("response raw is:", response)
@@ -62,8 +69,16 @@ export default async function createCustomerUser(event: onPostAuthenticationEven
      
   }
   catch(error){
-    console.log("Standard Fetch Failed:", error)
-
+    console.log("Standard Fetch Failed:");
+    console.log("Error type:", error?.constructor?.name || typeof error);
+    console.log("Error message:", error instanceof Error ? error.message : String(error));
+    console.log("Error stack:", error instanceof Error ? error.stack : "No stack trace available");
+    console.log("Full error object:", JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+    console.log("Error details:", {
+      name: error instanceof Error ? error.name : undefined,
+      message: error instanceof Error ? error.message : String(error),
+      ...(error && typeof error === 'object' ? error : {})
+    });
   }
 
 }
