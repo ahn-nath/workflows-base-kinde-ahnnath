@@ -2,7 +2,6 @@ import {
   onPostAuthenticationEvent,
   WorkflowSettings,
   WorkflowTrigger,
-  fetch, // confirmed that it works with fect
   secureFetch
 } from "@kinde/infrastructure";
 
@@ -12,15 +11,14 @@ export const workflowSettings: WorkflowSettings = {
   name: "Post Authentication - Create/Update User in database",
   trigger: WorkflowTrigger.PostAuthentication,
   bindings: {
-    "kinde.secureFetch": {},
     "kinde.env": {},
-    url: {},
+    "kinde.secureFetch": {},
   },
 };
 
 // https://webhook.site/9cc73bd5-80cb-4be4-8e5a-da9c8895f1f0
 
-const TEST_URL = "https://webhook.site/9cc73bd5-80cb-4be4-8e5a-da9c8895f1f0"
+const TEST_URL = "https://webhook.site/809c84f3-1ae3-4fb4-b298-51d53c0c0be4"
 
 
 // 1. The Client's Helper Function (Exact Copy)
@@ -48,25 +46,8 @@ export default async function createCustomerUser(event: onPostAuthenticationEven
   };
 
   try{
-    console.log("Attempting fetch to:", TEST_URL);
-    console.log("Payload:", payload);
-    const bodyParams = toURLSearchParams(payload);
-    console.log("Body params:", bodyParams.toString());
-    
 
-    /*
-    const response = await fetch(TEST_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      body: bodyParams,
-    });
-    */
-
-    const response = await secureFetch(
-      TEST_URL,
-      {
+    const response = await secureFetch(TEST_URL, {
         method: "POST",
         responseFormat: "json",
         headers: {
