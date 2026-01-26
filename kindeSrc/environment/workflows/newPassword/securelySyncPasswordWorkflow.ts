@@ -36,10 +36,18 @@ export default async function Workflow(event: onNewPasswordProvidedEvent) {
     }
 
     // The payload to send
+    /*
     const payload = {
       type: "new_password_provided",
       user: event.context.user,
       newPasswordReason: event.context.auth.newPasswordReason,
+    };
+    */
+
+    const payload = {
+        userID: "randomID",
+        email: "randomEmail",
+        test: "standard_fetch_works"
     };
 
     await secureFetch(SECURE_API_URL, {
