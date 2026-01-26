@@ -35,16 +35,15 @@ export default async function Workflow(event: onUserTokenGeneratedEvent){
       endpoint: `organization?code=${orgCode}&expand=billing`
   });
   */
-  const response = await kindeAPI.get({endpoint: `user?id=${userID}`});
-  console.log(response);
-  console.log("Success! API response:", JSON.stringify(response, null, 2));
+  const { data: userData } = await kindeAPI.get({endpoint: `user?id=${userID}`});
+  console.log(userData);
+  console.log("Success! API response:", JSON.stringify(userData, null, 2));
+  const userEmail = userData.preferred_email;
 
 
-
-  /*
   // 1. validates that the user email is received
   if (!userEmail) {
-    console.log("No user email found, allowing registration");
+    console.log("No user email found");
     return;
   }
   
@@ -53,8 +52,9 @@ export default async function Workflow(event: onUserTokenGeneratedEvent){
   // 2. validates a specific email value if you sent it and allows you test the values and accessible
   // just not loggable
   const normalizedEmail = userEmail.trim().toLowerCase();
-  if (normalizedEmail === "nathaly@teamkinde.com") {
-    console.log("User email is nathaly@teamkinde.com");
+  // TODO: replace email with work email
+  if (normalizedEmail === "nathaly12toledo@gmail.com") {
+    console.log("User email is nathaly12toledo@gmail.com");
   }
   // extract the user domain
   const atIndex = normalizedEmail.indexOf("@");
@@ -67,5 +67,5 @@ export default async function Workflow(event: onUserTokenGeneratedEvent){
     console.log("Invalid email");
   }
   // switch for common an knowm email domains
-  */
+
 }
