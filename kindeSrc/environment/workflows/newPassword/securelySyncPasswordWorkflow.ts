@@ -1,5 +1,5 @@
 import {
-  onPostAuthenticationEvent
+  onPostAuthenticationEvent,
   WorkflowSettings,
   WorkflowTrigger,
   secureFetch,
