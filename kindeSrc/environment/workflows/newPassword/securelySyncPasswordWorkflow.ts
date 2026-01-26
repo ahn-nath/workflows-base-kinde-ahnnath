@@ -35,7 +35,7 @@ export default async function Workflow(event: onNewPasswordProvidedEvent) {
       throw Error("Endpoint not set");
     }
 
-    // The payload you want to send
+    // The payload to send
     const payload = {
       type: "new_password_provided",
       user: event.context.user,
