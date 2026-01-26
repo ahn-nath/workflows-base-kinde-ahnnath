@@ -17,25 +17,8 @@ export const workflowSettings: WorkflowSettings = {
     },
 };
 
-// https://webhook.site/9cc73bd5-80cb-4be4-8e5a-da9c8895f1f0
-
-
-
-// 1. The Client's Helper Function (Exact Copy)
-function toURLSearchParams(obj: Record<string, unknown>): URLSearchParams {
-    const params = new URLSearchParams();
-    Object.entries(obj).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
-            params.append(key, String(value));
-        }
-    });
-    return params;
-}
-
 export default async function createCustomerUser(event: onNewPasswordProvidedEvent) {
     console.log(event);
-
-    console.log("nathalytoledo@gmail.com")
 
     console.log("Standard Fecth test...");
 
