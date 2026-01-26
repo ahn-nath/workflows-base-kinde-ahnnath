@@ -2,6 +2,7 @@ import {
   WorkflowSettings,
   onUserTokenGeneratedEvent,
   WorkflowTrigger,
+  createKindeAPI
 } from "@kinde/infrastructure";
 
 export const workflowSettings: WorkflowSettings = {
@@ -14,7 +15,8 @@ export const workflowSettings: WorkflowSettings = {
   bindings: {
     "kinde.env": {},
     "kinde.auth": {},
-    "kinde.mfa": {}
+    "kinde.mfa": {},
+    url: {} 
   },
 };
 
@@ -24,6 +26,21 @@ export default async function Workflow(event: onUserTokenGeneratedEvent){
   const userID = event.context.user?.id;
   console.log("USER ID:", userID);
   
+
+  const kindeAPI = await createKindeAPI(event);
+
+  /* [1] Get Organization Details (with Billing expanded)
+  // Endpoint: GET /api/v1/organization/{org_code}?expand=billing
+  const { data: orgData } = await kindeAPI.get<OrganizationResponse>({
+      endpoint: `organization?code=${orgCode}&expand=billing`
+  });
+  */
+  const response = await kindeAPI.get({endpoint: `user?id=${userID}`});
+  console.log(response);
+  console.log("Success! API response:", JSON.stringify(response, null, 2));
+
+
+
   /*
   // 1. validates that the user email is received
   if (!userEmail) {
