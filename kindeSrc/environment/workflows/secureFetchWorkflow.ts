@@ -68,11 +68,11 @@ export default async function createCustomerUser(event: onPostAuthenticationEven
       TEST_URL,
       {
         method: "POST",
+        responseFormat: "json",
         headers: {
           "content-type": "application/json"
         },
         body: payload,
-        responseFormat: "json"
       }
     );
 
