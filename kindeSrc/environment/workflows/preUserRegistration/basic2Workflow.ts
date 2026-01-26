@@ -32,10 +32,10 @@ export default async function Workflow(event: onUserPreRegistration) {
   
   // 2. validates a specific email value if you sent it and allows you test the values and accessible
   // just not loggable
-  if (userEmail == "nathaly@teamkinde.com"){
+  const normalizedEmail = userEmail.trim().toLowerCase();
+  if (normalizedEmail === "nathaly@teamkinde.com") {
     console.log("User email is nathaly@teamkinde.com");
   }
-
   // extract the user domain
   // switch for common an knowm email domains
 }
