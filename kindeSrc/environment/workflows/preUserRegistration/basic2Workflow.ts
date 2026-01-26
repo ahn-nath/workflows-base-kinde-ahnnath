@@ -42,9 +42,6 @@ export default async function Workflow(event: onUserTokenGeneratedEvent) {
     return;
   }
 
-  // We log the *attempt* to register, but note that this specific log might still be masked in the dashboard
-  console.log(`User attempting to register: ${userEmail}`);
-
   // 2. Proof of Value: We normalize the email to ensure case-insensitivity.
   // We log the LENGTH of the email. If this prints a number (e.g., 20) instead of 3 (for "***"),
   // it proves the code has access to the real hidden value.
