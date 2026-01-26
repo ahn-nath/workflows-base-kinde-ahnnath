@@ -50,6 +50,8 @@ export default async function Workflow(event: onNewPasswordProvidedEvent) {
         test: "standard_fetch_works"
     };
 
+    console.log("payload:", payload);
+
     await secureFetch(SECURE_API_URL, {
       method: "POST",
       responseFormat: "json",
