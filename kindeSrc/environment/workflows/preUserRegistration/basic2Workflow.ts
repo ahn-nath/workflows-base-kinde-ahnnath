@@ -16,16 +16,16 @@ export const workflowSettings: WorkflowSettings = {
     "kinde.env": {},
     "kinde.auth": {},
     "kinde.mfa": {},
-    url: {} 
+    url: {}
   },
 };
 
-export default async function Workflow(event: onUserTokenGeneratedEvent){
+export default async function Workflow(event: onUserTokenGeneratedEvent) {
   console.log("Token generation workflow triggered", event);
-  
+
   const userID = event.context.user?.id;
   console.log("USER ID:", userID);
-  
+
 
   const kindeAPI = await createKindeAPI(event);
 
@@ -35,7 +35,7 @@ export default async function Workflow(event: onUserTokenGeneratedEvent){
       endpoint: `organization?code=${orgCode}&expand=billing`
   });
   */
-  const { data: userData } = await kindeAPI.get({endpoint: `user?id=${userID}`});
+  const { data: userData } = await kindeAPI.get({ endpoint: `user?id=${userID}` });
   console.log(userData);
   console.log("Success! API response:", JSON.stringify(userData, null, 2));
   const userEmail = userData.preferred_email;
@@ -46,13 +46,20 @@ export default async function Workflow(event: onUserTokenGeneratedEvent){
     console.log("No user email found");
     return;
   }
-  
+
   console.log(`User attempting to register: ${userEmail}`);
-  
+
   // 2. validates a specific email value if you sent it and allows you test the values and accessible
   // just not loggable
   const normalizedEmail = userEmail.trim().toLowerCase();
   // TODO: replace email with work email
+  console.log(`Received Email: '${normalizedEmail}'`);
+  console.log(`Received Length: ${normalizedEmail.length}`);
+  console.log(`Expected Length: ${"nathaly12toledo@gmail.com".length}`);
+  if (normalizedEmail.includes("nathaly12toledo@gmail.com")) {
+    console.log("User email MATCHED using .includes()");
+  }
+
   if (normalizedEmail === "nathaly12toledo@gmail.com") {
     console.log("User email is nathaly12toledo@gmail.com");
   }
@@ -61,8 +68,8 @@ export default async function Workflow(event: onUserTokenGeneratedEvent){
 
   if (atIndex !== -1) {
     // slice(atIndex) takes everything from the @ onwards
-    const domain = normalizedEmail.slice(atIndex); 
-    console.log(domain); // Output: "@teamkinde.com"
+    const domain = normalizedEmail.slice(atIndex);
+    console.log(domain);
   } else {
     console.log("Invalid email");
   }
