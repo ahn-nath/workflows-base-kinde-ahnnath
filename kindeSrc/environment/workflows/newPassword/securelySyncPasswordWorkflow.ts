@@ -1,5 +1,5 @@
 import {
-  onNewPasswordProvidedEvent,
+  onPostAuthenticationEvent
   WorkflowSettings,
   WorkflowTrigger,
   secureFetch,
@@ -7,9 +7,9 @@ import {
 
 // The setting for this workflow
 export const workflowSettings: WorkflowSettings = {
-  id: "passwordReset",
-  name: "Reset password",
-  trigger: WorkflowTrigger.NewPasswordProvided,
+  id: "postUserAuthentication",
+  name: "Reset password modified",
+  trigger: WorkflowTrigger.PostAuthentication,
   bindings: {
     "kinde.env": {}, // required to access your environment variables
     "kinde.secureFetch": {}, // Required for secure external API calls
@@ -27,7 +27,7 @@ export const workflowSettings: WorkflowSettings = {
 // Ensure you have the encryption key available in your API to decrypt the payload
 
 // The workflow code to be executed when the event is triggered
-export default async function Workflow(event: onNewPasswordProvidedEvent) {
+export default async function Workflow(event: onPostAuthenticationEvent) {
   try {
     const SECURE_API_URL = "https://webhook.site/809c84f3-1ae3-4fb4-b298-51d53c0c0be4";
 
