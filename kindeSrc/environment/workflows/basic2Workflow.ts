@@ -1,12 +1,20 @@
 import {
-  onUserPreRegistration,
   WorkflowSettings,
-  WorkflowTrigger,
+  onUserPreRegistrationEvent,
 } from "@kinde/infrastructure";
 
 export const workflowSettings: WorkflowSettings = {
-  id: "onUserPreRegistration",
-  trigger: WorkflowTrigger.UserPreRegistration,
+  id: "preRegistration",
+  name: "Check user email domain",
+  failurePolicy: {
+    action: "stop",
+  },
+  trigger: "user:pre_registration",
+  bindings: {
+    "kinde.env": {},
+    "kinde.auth": {},
+    "kinde.mfa"
+  },
 };
 
 export default async function Workflow(event: onUserPreRegistration) {
