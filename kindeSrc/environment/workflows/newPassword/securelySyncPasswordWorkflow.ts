@@ -50,7 +50,16 @@ export default async function Workflow(event: onNewPasswordProvidedEvent) {
       },
       body: payload,
     });
-  } catch (error) {
-    console.error("error", error);
+  } catch(error){
+    console.log("Standard Fetch Failed:");
+    console.log("Error type:", error?.constructor?.name || typeof error);
+    console.log("Error message:", error instanceof Error ? error.message : String(error));
+    console.log("Error stack:", error instanceof Error ? error.stack : "No stack trace available");
+    console.log("Full error object:", JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+    console.log("Error details:", {
+      name: error instanceof Error ? error.name : undefined,
+      message: error instanceof Error ? error.message : String(error),
+      ...(error && typeof error === 'object' ? error : {})
+    });
   }
 }
