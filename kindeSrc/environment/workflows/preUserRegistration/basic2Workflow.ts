@@ -37,5 +37,14 @@ export default async function Workflow(event: onUserPreRegistration) {
     console.log("User email is nathaly@teamkinde.com");
   }
   // extract the user domain
+  const atIndex = normalizedEmail.indexOf("@");
+
+  if (atIndex !== -1) {
+    // slice(atIndex) takes everything from the @ onwards
+    const domain = normalizedEmail.slice(atIndex); 
+    console.log(domain); // Output: "@teamkinde.com"
+  } else {
+    console.log("Invalid email");
+  }
   // switch for common an knowm email domains
 }
