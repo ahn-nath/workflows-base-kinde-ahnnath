@@ -29,12 +29,6 @@ export default async function Workflow(event: onUserTokenGeneratedEvent) {
 
   const kindeAPI = await createKindeAPI(event);
 
-  /* [1] Get Organization Details (with Billing expanded)
-  // Endpoint: GET /api/v1/organization/{org_code}?expand=billing
-  const { data: orgData } = await kindeAPI.get<OrganizationResponse>({
-      endpoint: `organization?code=${orgCode}&expand=billing`
-  });
-  */
   const { data: userData } = await kindeAPI.get({ endpoint: `user?id=${userID}` });
   console.log(userData);
   console.log("Success! API response:", JSON.stringify(userData, null, 2));
@@ -57,12 +51,9 @@ export default async function Workflow(event: onUserTokenGeneratedEvent) {
   console.log(`Received Length: ${normalizedEmail.length}`);
   console.log(`Expected Length: ${"nathaly12toledo@gmail.com".length}`);
   if (normalizedEmail.includes("nathaly12toledo@gmail.com")) {
-    console.log("User email MATCHED using .includes()");
+    console.log("User email MATCHED nathaly12toledo@gmail.com using .includes()");
   }
 
-  if (normalizedEmail === "nathaly12toledo@gmail.com") {
-    console.log("User email is nathaly12toledo@gmail.com");
-  }
   // extract the user domain
   const atIndex = normalizedEmail.indexOf("@");
 
