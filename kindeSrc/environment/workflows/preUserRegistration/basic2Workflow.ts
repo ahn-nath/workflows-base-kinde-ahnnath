@@ -51,19 +51,24 @@ export default async function Workflow(event: onUserTokenGeneratedEvent) {
   console.log(`Received Length: ${normalizedEmail.length}`);
   console.log(`Expected Length: ${"nathaly12toledo@gmail.com".length}`);
   if (normalizedEmail.includes("nathaly12toledo@gmail.com")) {
-    console.log("User email MATCHED nathaly12toledo@gmail.com using .includes()");
+    console.log("User email MATCHED nathaly12toledo using .includes()");
   }
 
   // extract the user domain
   const atIndex = normalizedEmail.indexOf("@");
 
   if (atIndex !== -1) {
-    // slice(atIndex) takes everything from the @ onwards
-    const domain = normalizedEmail.slice(atIndex);
-    console.log(domain);
-  } else {
+    // 1. Get the domain (from @ to the end)
+    const domain = normalizedEmail.slice(atIndex); 
+    
+    // 2. Get the username (from start up to @)
+    const username = normalizedEmail.slice(0, atIndex);
+
+    console.log("Username:", username); // Output: nathaly12toledo
+    console.log("Domain:", domain);     // Output: @gmail.com
+} else {
     console.log("Invalid email");
-  }
+}
   // switch for common an knowm email domains
 
 }
