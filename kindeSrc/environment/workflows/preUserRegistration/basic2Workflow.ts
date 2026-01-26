@@ -1,6 +1,7 @@
 import {
   WorkflowSettings,
-  onUserPreRegistrationEvent,
+  onUserTokenGeneratedEvent,
+  WorkflowTrigger,
 } from "@kinde/infrastructure";
 
 export const workflowSettings: WorkflowSettings = {
@@ -9,7 +10,7 @@ export const workflowSettings: WorkflowSettings = {
   failurePolicy: {
     action: "stop",
   },
-  trigger: "user:pre_registration",
+  trigger: WorkflowTrigger.UserTokenGeneration,
   bindings: {
     "kinde.env": {},
     "kinde.auth": {},
@@ -17,11 +18,13 @@ export const workflowSettings: WorkflowSettings = {
   },
 };
 
-export default async function Workflow(event: onUserPreRegistration) {
-  console.log("Pre-registration workflow triggered", event);
+export default async function Workflow(event: onUserTokenGeneratedEvent){
+  console.log("Token generation workflow triggered", event);
   
-  const userEmail = event.context.user?.email;
+  const userID = event.context.user?.id;
+  console.log("USER ID:", userID);
   
+  /*
   // 1. validates that the user email is received
   if (!userEmail) {
     console.log("No user email found, allowing registration");
@@ -47,4 +50,5 @@ export default async function Workflow(event: onUserPreRegistration) {
     console.log("Invalid email");
   }
   // switch for common an knowm email domains
+  */
 }
