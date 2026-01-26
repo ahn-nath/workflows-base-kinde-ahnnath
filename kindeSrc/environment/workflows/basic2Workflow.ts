@@ -13,7 +13,7 @@ export const workflowSettings: WorkflowSettings = {
   bindings: {
     "kinde.env": {},
     "kinde.auth": {},
-    "kinde.mfa"
+    "kinde.mfa": {}
   },
 };
 
