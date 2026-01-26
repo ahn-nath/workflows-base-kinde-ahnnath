@@ -71,7 +71,7 @@ export default async function createCustomerUser(event: onPostAuthenticationEven
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: payload,
+        body: bodyParams,
         responseFormat: "json"
       }
     );
