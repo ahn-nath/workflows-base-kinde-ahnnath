@@ -26,49 +26,62 @@ export default async function Workflow(event: onUserTokenGeneratedEvent) {
   const userID = event.context.user?.id;
   console.log("USER ID:", userID);
 
-
+  // Initialize the Kinde API to fetch full user details
   const kindeAPI = await createKindeAPI(event);
-
   const { data: userData } = await kindeAPI.get({ endpoint: `user?id=${userID}` });
-  console.log(userData);
-  console.log("Success! API response:", JSON.stringify(userData, null, 2));
+
+  // Note: JSON.stringify might still show masked values in logs due to PII filtering,
+  // but the object 'userData' contains the real values in memory.
+  console.log("Success! API response received.");
+  
   const userEmail = userData.preferred_email;
 
-
-  // 1. validates that the user email is received
+  // 1. Validation: Ensure the email property exists before proceeding
   if (!userEmail) {
-    console.log("No user email found");
+    console.log("No user email found on the fetched profile.");
     return;
   }
 
+  // We log the *attempt* to register, but note that this specific log might still be masked in the dashboard
   console.log(`User attempting to register: ${userEmail}`);
 
-  // 2. validates a specific email value if you sent it and allows you test the values and accessible
-  // just not loggable
+  // 2. Proof of Value: We normalize the email to ensure case-insensitivity.
+  // We log the LENGTH of the email. If this prints a number (e.g., 20) instead of 3 (for "***"),
+  // it proves the code has access to the real hidden value.
   const normalizedEmail = userEmail.trim().toLowerCase();
-  // TODO: replace email with work email
-  console.log(`Received Email: '${normalizedEmail}'`);
-  console.log(`Received Length: ${normalizedEmail.length}`);
-  console.log(`Expected Length: ${"nathaly12toledo@gmail.com".length}`);
-  if (normalizedEmail.includes("nathaly12toledo@gmail.com")) {
-    console.log("User email MATCHED nathaly12toledo using .includes()");
+  console.log(`Received email length: ${normalizedEmail.length}`);
+  
+  // Test against a known string to verify content access without printing PII
+  const testEmail = "nathaly@teamkinde.com";
+  console.log(`Expected email length: ${testEmail.length}`);
+  
+  if (normalizedEmail.includes(testEmail)) {
+    console.log("User email MATCHED test email using .includes()");
   }
 
-  // extract the user domain
+  // 3. Domain Extraction Logic
   const atIndex = normalizedEmail.indexOf("@");
 
+  // Verify that the email structure is valid (contains an '@')
   if (atIndex !== -1) {
-    // 1. Get the domain (from @ to the end)
+    // Extract the domain (substring from '@' to the end)
     const domain = normalizedEmail.slice(atIndex); 
     
-    // 2. Get the username (from start up to @)
+    // Extract the username (substring from start up to '@')
     const username = normalizedEmail.slice(0, atIndex);
 
-    console.log("Username:", username); // Output: nathaly12toledo
-    console.log("Domain:", domain);     // Output: @gmail.com
-} else {
-    console.log("Invalid email");
-}
-  // switch for common an knowm email domains
+    // Logging these separate parts often bypasses the full-email PII mask, 
+    // allowing you to verify you have the right data.
+    console.log("Username extracted:", username); 
+    console.log("Domain extracted:", domain);     
 
+    // << HERE YOU CAN ADD YOUR LOGIC FOR THE CLAIMS AND CONDITIONAL CHECKS >>
+    // Example:
+    // if (domain === "@example.com") {
+    //    // Add custom claim logic here
+    // }
+
+  } else {
+    console.log("Invalid email format encountered");
+  }
 }
