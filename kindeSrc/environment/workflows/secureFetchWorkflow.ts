@@ -64,7 +64,7 @@ export default async function createCustomerUser(event: onPostAuthenticationEven
     });
     */
 
-    const response = await secureFetch<{error?: string }>(
+    const response = await secureFetch(
       TEST_URL,
       {
         method: "POST",
