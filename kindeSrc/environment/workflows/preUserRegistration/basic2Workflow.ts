@@ -2,6 +2,7 @@ import {
   WorkflowSettings,
   onUserTokenGeneratedEvent,
   WorkflowTrigger,
+  accessTokenCustomClaims,
 } from "@kinde/infrastructure";
 
 
@@ -26,9 +27,18 @@ function getRandomInt(){
 }
 
 export default async function Workflow(event: onUserTokenGeneratedEvent) {
-  console.log("Token generation workflow triggered for updating the token", event);
+  console.log("Token generation workflow triggered for updating the token");
+  
+  // 1. The value to be used for the claim
   let randomNum = getRandomInt();
-
   console.log(`Random number is ${randomNum}`)
+
+  // 2. Define the claim and add it to the token
+  const accessToken = accessTokenCustomClaims<{
+    user_permissions: number;
+  }>();
+
+  accessToken.user_permissions = randomNum;
+
 
 }
