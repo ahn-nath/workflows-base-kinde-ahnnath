@@ -14,7 +14,7 @@ export const workflowSettings: WorkflowSettings = {
   },
   trigger: WorkflowTrigger.UserTokenGeneration,
   bindings: {
-    "kinde.env": {},
+    "kinde.accessToken": {}, 
     "kinde.auth": {},
     "kinde.mfa": {},
     url: {}
